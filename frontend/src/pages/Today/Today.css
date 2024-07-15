@@ -1,0 +1,56 @@
+.today{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.today .HeaderContent h1{
+    font-size: 25px;
+    font-weight: 700;
+}
+.today .task {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    
+}
+.today .task p{
+    margin-left: 10px;
+    color: #c1c1c1;
+}
+.today .task .iconPlus{
+    color: #dc4c3e;   
+    padding: 5px;
+    border-radius: 50%;
+}
+.today .task:hover .iconPlus{
+    background-color: #dc4c3e;
+    color: white;
+}
+.today .task:hover p{
+    color: #dc4c3e;
+}
+.today .ImageDiv{
+    margin-top: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.today .ImageDiv img{
+    display: ruby
+}
+.today .ImageDiv div{
+    text-align: center;
+}
+.today .boxTask{
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.today .boxTask input{
+    outline: none;
+}
+.TaskName{
+    font-weight: bold;
+}
