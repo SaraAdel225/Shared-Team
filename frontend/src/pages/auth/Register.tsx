@@ -46,6 +46,8 @@ export default function SimpleCard() {
         if (!user.identifier && !user.password) {
             setIsEmail(true)
             setIsPasword(true)
+
+            
         }
         if (!user.identifier) {
             setIsEmail(true)
@@ -71,7 +73,7 @@ export default function SimpleCard() {
             justify={'center'}>
             <Stack as={"form"} spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
                 <Stack align={'center'}>
-                    <Heading fontSize={'4xl'}>Login</Heading>
+                    <Heading fontSize={'4xl'}>Register</Heading>
                     {/* <Text fontSize={'lg'} color={'gray.600'}>
                         to enjoy all of our cool <Text color={'blue.400'}>features</Text> ✌️
                     </Text> */}
