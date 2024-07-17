@@ -17,23 +17,35 @@ import {
 import {
     FormHelperText,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GrView } from "react-icons/gr";
 import { BiHide } from "react-icons/bi";
+import { useDispatch } from 'react-redux';
+import { selectLogin, userLogin } from '../../app/feature/loginSlice';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import cookies from '../../service/cookies';
 // 
 // import { Navigate } from 'react-router-dom';
 
 
 
-export default function SimpleCard() {
-
-    const [showPassword, setShowPassword] = useState(false)
+export default function SimpleCard({isAuthenticated} : string ) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const {loading , dataApi } = useSelector(selectLogin)
+    console.log(dataApi)
     const [isEmail, setIsEmail] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const [isPasword, setIsPasword] = useState(false)
     const [user, setUser] = useState({
+        username:"",
         identifier: "",
         password: "",
     })
+
+  
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
@@ -43,10 +55,11 @@ export default function SimpleCard() {
     const onSubmit = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
-        if (!user.identifier && !user.password) {
+        if (!user.identifier && !user.password )  {
             setIsEmail(true)
             setIsPasword(true)
         }
+      
         if (!user.identifier) {
             setIsEmail(true)
 
@@ -59,10 +72,16 @@ export default function SimpleCard() {
 
         setIsEmail(false)
         setIsPasword(false)
+        dispatch(userLogin(user))
+        
+        
         return
     }
 
-    // if (isAuthenticated) return <Navigate to="/" replace />
+
+    
+
+    if (isAuthenticated) return <Navigate to="/" replace />
 
     return (
         <Flex
@@ -72,12 +91,10 @@ export default function SimpleCard() {
             <Stack as={"form"} spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
                 <Stack align={'center'}>
                     <Heading fontSize={'4xl'}>Login</Heading>
-                    {/* <Text fontSize={'lg'} color={'gray.600'}>
-                        to enjoy all of our cool <Text color={'blue.400'}>features</Text> ✌️
-                    </Text> */}
                 </Stack>
                 <Box
                     rounded={'lg'}
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     bg={useColorModeValue('white', 'gray.700')}
                     boxShadow={'lg'}
                     p={8}>
@@ -122,14 +139,14 @@ export default function SimpleCard() {
                                 type={"submit"}
                                 bg={'#dc4c3e'}
                                 color={'white'}
-                                // isLoading={loading}
+                                isLoading={loading}
                                 _hover={{
                                     bg: '#b22c1f',
                                 }}>
                                 Sign in
                             </Button>
                         </Stack>
-                        <Text color={"#666"} textAlign={"center"} fontSize="sm" textDecorationLine={"underLine"}>Don’t have an account? Sign up</Text>
+                        <Text color={"#666"} textAlign={"center"} fontSize="sm" textDecorationLine={"underLine"}>Don’t have an account? <Link to={"/register"}>Sign up</Link></Text>
                     </Stack>
                 </Box>
             </Stack>

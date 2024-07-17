@@ -7,14 +7,18 @@ import Upcoming from "../pages/Upcoming";
 import Login from "../pages/auth/Login";
 import { Flex, Image } from "@chakra-ui/react";
 import Register from "../pages/auth/Register";
+import cookies from "../service/cookies";
 
 
+const isAuthenticated: string | undefined  = cookies.get("jwt") || undefined
+
+console.log( typeof isAuthenticated)
 
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            <Route path="/" element={<SidebarLayout />} >
+            <Route path="/" element={<SidebarLayout isAuthenticated={isAuthenticated} />} >
                 <Route index element={<Today />} />
                 <Route path={"inbox"} element={<Inbox />} />
                 <Route path={"upcoming"} element={<Upcoming />} />
@@ -24,7 +28,7 @@ export const router = createBrowserRouter(
             <Route path={"/login"} element={
                 <Flex justifyContent={"center"} alignItems={"center"}>
 
-                    <Login />
+                    <Login isAuthenticated={isAuthenticated} />
 
                     <Image
                         display={{base: "none" , lg: "block"}}
@@ -42,7 +46,7 @@ export const router = createBrowserRouter(
             <Route path={"/register"} element={
                 <Flex justifyContent={"center"} alignItems={"center"}>
 
-                    <Register />
+                    <Register isAuthenticated={isAuthenticated} />
 
                     <Image
                         display={{base: "none" , lg: "block"}}

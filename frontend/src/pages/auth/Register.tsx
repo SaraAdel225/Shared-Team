@@ -20,18 +20,23 @@ import {
 import React, { useState } from 'react'
 import { GrView } from "react-icons/gr";
 import { BiHide } from "react-icons/bi";
+import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { userRegister } from '../../app/feature/registerSlice';
 // 
 // import { Navigate } from 'react-router-dom';
 
 
 
-export default function SimpleCard() {
-
+export default function SimpleCard({isAuthenticated} :string) {
+    const dispatch = useDispatch()
+    const [isUsername, setIsUsername] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [isEmail, setIsEmail] = useState(false)
     const [isPasword, setIsPasword] = useState(false)
     const [user, setUser] = useState({
-        identifier: "",
+        username:"",
+        email: "",
         password: "",
     })
 
@@ -43,13 +48,19 @@ export default function SimpleCard() {
     const onSubmit = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
-        if (!user.identifier && !user.password) {
+        if (!user.email && !user.password && !user.username) {
+            setIsUsername(true)
             setIsEmail(true)
             setIsPasword(true)
 
             
         }
-        if (!user.identifier) {
+        if (!user.username) {
+            setIsUsername(true)
+            
+            return
+        }
+        if (!user.email) {
             setIsEmail(true)
 
             return
@@ -58,13 +69,15 @@ export default function SimpleCard() {
             setIsPasword(true)
             return
         }
-
+        
+        setIsUsername(false)
         setIsEmail(false)
         setIsPasword(false)
+        dispatch(userRegister(user))
         return
     }
 
-    // if (isAuthenticated) return <Navigate to="/" replace />
+    if (isAuthenticated) return <Navigate to="/" replace />
 
     return (
         <Flex
@@ -74,19 +87,26 @@ export default function SimpleCard() {
             <Stack as={"form"} spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
                 <Stack align={'center'}>
                     <Heading fontSize={'4xl'}>Register</Heading>
-                    {/* <Text fontSize={'lg'} color={'gray.600'}>
-                        to enjoy all of our cool <Text color={'blue.400'}>features</Text> ✌️
-                    </Text> */}
+                    
                 </Stack>
                 <Box
                     rounded={'lg'}
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     bg={useColorModeValue('white', 'gray.700')}
                     boxShadow={'lg'}
                     p={8}>
                     <Stack spacing={4}>
+                        <FormControl id="username">
+                            <FormLabel>Username</FormLabel>
+                            <Input type="text" name="username" value={user.username} onChange={(e) => onChangeHandler(e)} isInvalid={isUsername}
+                                errorBorderColor='red.300' required />
+                            {isUsername ? <FormHelperText color={"red.500"}>
+                                Username is required
+                            </FormHelperText> : null}
+                        </FormControl>
                         <FormControl id="email">
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email" name="identifier" value={user.identifier} onChange={(e) => onChangeHandler(e)} isInvalid={isEmail}
+                            <Input type="email" name="email" value={user.email} onChange={(e) => onChangeHandler(e)} isInvalid={isEmail}
                                 errorBorderColor='red.300' required />
                             {isEmail ? <FormHelperText color={"red.500"}>
                                 Email is required

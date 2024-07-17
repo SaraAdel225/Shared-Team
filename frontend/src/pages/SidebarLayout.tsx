@@ -33,7 +33,7 @@ import { GoInbox } from "react-icons/go";
 import { IoTodayOutline ,IoCalendarOutline} from "react-icons/io5";
 import { BsMenuButtonWide } from "react-icons/bs";
 import { TiPlus } from "react-icons/ti";
-import {  Outlet } from 'react-router-dom'
+import {  Navigate, Outlet } from 'react-router-dom'
 import { NavLink as RouteLink } from 'react-router-dom'
 import DialogComp from '../shared/AlertDialog';
 
@@ -275,11 +275,17 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     )
 }
 
-const SidebarLayout = () => {
+
+interface SidebarLayoutProps {
+    isAuthenticated: string | undefined;
+  }
+
+const SidebarLayout = ({isAuthenticated}  : SidebarLayoutProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen : isOpenTask , onOpen : onOpenTask , onClose : onCloseTask } = useDisclosure()
     const { isOpen : isOpenSearch , onOpen : onOpenSearch , onClose : onCloseSearch } = useDisclosure()
-
+    
+    if (!isAuthenticated) return <Navigate to="/login" replace />
 
     return (
         <>
@@ -310,7 +316,7 @@ const SidebarLayout = () => {
 
         {/* هنا اكتبي الكود اللي هيظهر جوا المودل اللي بتظهر لما تضغطي ع Add Task */}
         <DialogComp isOpen={isOpenTask} onClose={onCloseTask} title={'Bla Bla Bla'}    >
-            <h3>Hello New Task</h3>
+            <h3>Hello New 1 Task</h3>
         </DialogComp>
         {/* هنا اكتبي الكود اللي هيظهر جوا المودل اللي بتظهر لما تضغطي ع Search */}
         <DialogComp isOpen={isOpenSearch} onClose={onCloseSearch} title={'Bla Bla Bla'}    >
