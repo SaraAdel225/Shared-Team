@@ -17,69 +17,54 @@ import {
 import {
     FormHelperText,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
 import { GrView } from "react-icons/gr";
 import { BiHide } from "react-icons/bi";
 import { useDispatch } from 'react-redux';
 import { selectLogin, userLogin } from '../../app/feature/loginSlice';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import cookies from '../../service/cookies';
-// 
-// import { Navigate } from 'react-router-dom';
 
 
 
-export default function SimpleCard({isAuthenticated} : string ) {
+export default function SimpleCard({ isAuthenticated }: string | null) {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const {loading , dataApi } = useSelector(selectLogin)
-    console.log(dataApi)
+    const { loading } = useSelector(selectLogin)
     const [isEmail, setIsEmail] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [isPasword, setIsPasword] = useState(false)
     const [user, setUser] = useState({
-        username:"",
+        username: "",
         identifier: "",
         password: "",
     })
 
-  
+
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
         setUser({ ...user, [name]: value })
     }
 
-    const onSubmit = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-
-        if (!user.identifier && !user.password )  {
+        if (!user.identifier && !user.password) {
             setIsEmail(true)
             setIsPasword(true)
         }
-      
         if (!user.identifier) {
             setIsEmail(true)
-
             return
         }
         if (!user.password) {
             setIsPasword(true)
             return
         }
-
         setIsEmail(false)
         setIsPasword(false)
         dispatch(userLogin(user))
-        
-        
         return
     }
-
-
-    
 
     if (isAuthenticated) return <Navigate to="/" replace />
 
