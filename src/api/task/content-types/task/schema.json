@@ -22,6 +22,12 @@
     "date": {
       "type": "date",
       "required": true
+    },
+    "comments": {
+      "displayName": "comments",
+      "type": "component",
+      "repeatable": false,
+      "component": "comment.comments"
     }
   }
 }
