@@ -3,6 +3,8 @@ import { router } from "./router"
 import { ChakraProvider } from "@chakra-ui/react"
 import { Provider } from "react-redux"
 import { store } from "./app/store"
+import './index.css'
+
 
 
 function App() {
