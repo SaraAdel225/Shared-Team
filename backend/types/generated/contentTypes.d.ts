@@ -377,12 +377,39 @@ export interface ApiTaskTask extends Schema.CollectionType {
     title: Attribute.String & Attribute.Required;
     description: Attribute.Text;
     date: Attribute.Date & Attribute.Required;
+    complete: Attribute.Boolean & Attribute.DefaultTo<false>;
+    todo: Attribute.Relation<
+      'api::task.task',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::task.task', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::task.task', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiUserUser extends Schema.CollectionType {
+  collectionName: 'users';
+  info: {
+    singularName: 'user';
+    pluralName: 'users';
+    displayName: 'User';
+    description: '';
+  };
+  attributes: {
+    username: Attribute.String & Attribute.Unique;
+    email: Attribute.String & Attribute.Unique;
+    tasks: Attribute.Relation<'api::user.user', 'oneToMany', 'api::task.task'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::user.user', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::user.user', 'oneToOne', 'admin::user'> &
       Attribute.Private;
   };
 }
@@ -796,6 +823,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    tasks: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::task.task'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -824,6 +856,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::task.task': ApiTaskTask;
+      'api::user.user': ApiUserUser;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

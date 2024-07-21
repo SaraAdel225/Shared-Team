@@ -16,17 +16,16 @@ import {
     useDisclosure,
     BoxProps,
     FlexProps,
+    Stack,
     // Menu,
     // MenuButton,
     // MenuDivider,
     // MenuItem,
     // MenuList,
 } from '@chakra-ui/react'
-import {
-    FiMenu,
-    // FiBell,
-    // FiChevronDown,
-} from 'react-icons/fi'
+
+import { BsLayoutSidebar } from "react-icons/bs";
+
 import { IconType } from 'react-icons'
 import { IoIosSearch } from "react-icons/io";
 import { GoInbox } from "react-icons/go";
@@ -38,6 +37,8 @@ import { NavLink as RouteLink } from 'react-router-dom'
 import DialogComp from '../shared/AlertDialog';
 import AddTask from '../components/AddTask';
 import ResizablePanel from '../components/ResizablePanel';
+import { useMediaQuery } from 'react-responsive';
+
 
 
 interface LinkItemProps {
@@ -71,28 +72,29 @@ const LinkItems: Array<LinkItemProps> = [
 ]
 
 
-
 const SidebarContent = ({ onClose, onOpenTask, onOpenSearch, ...rest }: SidebarProps) => {
     return (
         <Box
             transition="3s ease"
             bg={useColorModeValue('white', 'gray.900')}
-            borderRight="1px"
-            borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-            // w={{ base: 'full' }}
-
-            // pos="fixed"
             h="full"
             {...rest}>
             <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
                 <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
                     Logo
                 </Text>
-                <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+                <IconButton
+                    onClick={onClose}
+                    variant="outline"
+                    _hover={{ bg: "transparent" }}
+                    border="none"
+                    display={{ base: 'flex', md: 'none' }}
+                    aria-label="open menu"
+                    icon={<BsLayoutSidebar />}
+                />
+
+                {/* <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} /> */}
             </Flex>
-
-            {/* <MobileNav /> */}
-
             <Box
                 style={{ textDecoration: 'none' }}
                 _focus={{ bg: "#ffefe5" }}
@@ -209,13 +211,18 @@ const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
 
 const MobileNav = ({ onOpen }: MobileProps) => {
     return (
-        <IconButton
-            display={{ base: 'flex', md: 'none' }}
-            onClick={onOpen}
-            variant="outline"
-            aria-label="open menu"
-            icon={<FiMenu />}
-        />
+        <Stack className='relative w-fit h-fit'>
+            <IconButton
+                onClick={onOpen}
+                variant="outline"
+                _hover={{ bg: "transparent" }}
+                border="none"
+
+                aria-label="open menu"
+                icon={<BsLayoutSidebar />}
+            />
+            <span className='absolute w-2 h-2 rounded-full right-2 top-2 bg-[#dc4c3e]'></span>
+        </Stack>
 
     )
 }
@@ -229,13 +236,15 @@ const SidebarLayout = ({ isAuthenticated }: SidebarLayoutProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenTask, onOpen: onOpenTask, onClose: onCloseTask } = useDisclosure()
     const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure()
+    const isSmallScreen = useMediaQuery({ maxWidth: 768 });
 
     if (!isAuthenticated) return <Navigate to="/login" replace />
+
 
     return (
         <>
             <Box minH="100vh">
-                <ResizablePanel leftPanel={
+                {isSmallScreen ?
                     <>
                         <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} onOpenTask={onOpenTask} onOpenSearch={onOpenSearch} />
                         <Drawer
@@ -251,33 +260,44 @@ const SidebarLayout = ({ isAuthenticated }: SidebarLayoutProps) => {
                         </Drawer>
                         {/* mobilenav */}
                         <MobileNav onOpen={onOpen} />
-                    </>
-                }
-                    rightPanel={
-                        <>
-                            <Box p="4">
-                                {/* Content */}
-                                {/* <button onClick={ onOpenTask}>ggg</button> */}
-                                <Outlet />
+                        <Box p="4">
+                            <Outlet />
 
-                            </Box>
+                        </Box>
+
+                    </> : <ResizablePanel leftPanel={
+                        <>
+                            <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} onOpenTask={onOpenTask} onOpenSearch={onOpenSearch} />
+                            <Drawer
+                                isOpen={isOpen}
+                                placement="left"
+                                onClose={onClose}
+                                returnFocusOnClose={false}
+                                onOverlayClick={onClose}
+                                size="sm">
+                                <DrawerContent>
+                                    <SidebarContent onClose={onClose} onOpenTask={onOpenTask} onOpenSearch={onOpenSearch} />
+                                </DrawerContent>
+                            </Drawer>
+                            {/* mobilenav */}
+                            <MobileNav onOpen={onOpen} />
                         </>
                     }
-
-                >
-
-                </ResizablePanel>
-
-
-
-
-
+                        rightPanel={
+                            <>
+                                <Box p="4">
+                                    <Outlet />
+                                </Box>
+                            </>
+                        }
+                    >
+                    </ResizablePanel>}
             </Box>
 
 
             {/* هنا اكتبي الكود اللي هيظهر جوا المودل اللي بتظهر لما تضغطي ع Add Task */}
             <DialogComp isOpen={isOpenTask} onClose={onCloseTask}     >
-                <AddTask />
+                <AddTask onCloseTask={onCloseTask} />
             </DialogComp>
             {/* هنا اكتبي الكود اللي هيظهر جوا المودل اللي بتظهر لما تضغطي ع Search */}
             <DialogComp isOpen={isOpenSearch} onClose={onCloseSearch}     >

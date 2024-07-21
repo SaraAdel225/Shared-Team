@@ -8,12 +8,14 @@ import { IoIosArrowDown } from "react-icons/io";
 import { GoInbox } from "react-icons/go";
 
 
+interface IProps {
+    onCloseTask: () => void
+}
 
 
 
 
-
-const AddTask = () => {
+const AddTask = ({ onCloseTask }: IProps) => {
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -69,10 +71,14 @@ const AddTask = () => {
                     </Button>
 
                     <Stack direction='row' spacing={4}>
-                        <Button fontSize={13}  variant='solid' >
+                        <Button fontSize={13} variant='solid' onClick={() => onCloseTask()} >
                             Cancel
                         </Button>
-                        <Button variant='solid' fontSize={13}  bg="#dc4c3e" color="#fff" _hover={"#dc4c3e"} opacity={`${task.title ? "1" : "0.5"} `} cursor={`${task.title ? "pointer" : "not-allowed"} `}>
+                        <Button variant='solid' fontSize={13} bg="#dc4c3e" color="#fff"
+                            _hover={"#dc4c3e"} opacity={`${task.title ? "1" : "0.5"} `}
+                            cursor={`${task.title ? "pointer" : "not-allowed"} `}
+                            disabled={!task.title}
+                            onClick={() => console.log("RRRR")}>
                             Add Task
                         </Button>
                     </Stack>

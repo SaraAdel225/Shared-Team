@@ -85,7 +85,6 @@ export const userLogin: AsyncThunk<User, LoginCredentials, object> = createAsync
     }
 )
 
-
 const loginSlice = createSlice({
     name: "login",
     initialState,

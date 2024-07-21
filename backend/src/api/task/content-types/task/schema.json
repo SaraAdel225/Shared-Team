@@ -22,6 +22,16 @@
     "date": {
       "type": "date",
       "required": true
+    },
+    "complete": {
+      "type": "boolean",
+      "default": false
+    },
+    "todo": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "tasks"
     }
   }
 }

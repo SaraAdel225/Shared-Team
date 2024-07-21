@@ -19,7 +19,7 @@ const Today = () => {
                         </button>
                         <div className="ImageDiv">
                             <div>
-                                <img src={ImgToDay} />
+                                <img src={ImgToDay} className="max-w-full" />
                                 <h5>You're all done for the week, user</h5>
                                 <p>Enjoy the rest of your day and don't forget to share your #TodoistZero awesomeness</p>
                             </div>

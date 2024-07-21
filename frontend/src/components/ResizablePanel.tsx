@@ -1,6 +1,5 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { useMediaQuery } from 'react-responsive';
 
 interface IProps {
     leftPanel: ReactNode;
@@ -8,42 +7,42 @@ interface IProps {
 }
 
 const ResizablePanel = ({ leftPanel, rightPanel }: IProps) => {
-    const isSmallScreen = useMediaQuery({ maxWidth: 768 });
-    const [rightSize, setRightSize] = useState<number>(80); // حجم الافتراضي للشاشة الكبيرة
-    const [leftSize, setLeftSize] = useState<number>(20); // حجم الافتراضي للشاشة الصغيرة
+    // const isSmallScreen = useMediaQuery({ maxWidth: 768 });
+    // const [rightSize, setRightSize] = useState<number>(80); // حجم الافتراضي للشاشة الكبيرة
+    // const [leftSize, setLeftSize] = useState<number>(20); // حجم الافتراضي للشاشة الصغيرة
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (isSmallScreen) {
-                setRightSize(90); // حجم الشاشة الصغيرة
-                setLeftSize(10); // حجم الشاشة الصغيرة
-            } else {
-                setRightSize(80); // حجم الشاشة الكبيرة
-                setLeftSize(20); // حجم الشاشة الصغيرة
-            }
-        };
+    // useEffect(() => {
+    //     const handleResize = () => {
+    //         if (isSmallScreen) {
+    //             setRightSize(90); // حجم الشاشة الصغيرة
+    //             setLeftSize(10); // حجم الشاشة الصغيرة
+    //         } else {
+    //             setRightSize(80); // حجم الشاشة الكبيرة
+    //             setLeftSize(20); // حجم الشاشة الصغيرة
+    //         }
+    //     };
 
-        // استدعاء handleResize بشكل أولي وعند تغيير الحجم
-        handleResize();
+    //     // استدعاء handleResize بشكل أولي وعند تغيير الحجم
+    //     handleResize();
 
-        // إضافة مستمع لتغيير حجم الشاشة
-        window.addEventListener('resize', handleResize);
+    //     // إضافة مستمع لتغيير حجم الشاشة
+    //     window.addEventListener('resize', handleResize);
 
-        // إزالة مستمع عندما يتم تفريغ المكون
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [isSmallScreen]);
+    //     // إزالة مستمع عندما يتم تفريغ المكون
+    //     return () => {
+    //         window.removeEventListener('resize', handleResize);
+    //     };
+    // }, [isSmallScreen]);
 
-    console.log({ rightSize, leftSize });
+    // console.log({ rightSize, leftSize });
 
     return (
         <PanelGroup direction="horizontal">
-            <Panel defaultSize={leftSize} minSize={isSmallScreen ? 10 : 30}>
+            <Panel defaultSize={24} minSize={22 }>
                 {leftPanel}
             </Panel>
-            <PanelResizeHandle className='border-r-9 bg-red-500 w-4 ' />
-            <Panel defaultSize={rightSize} minSize={isSmallScreen ? 90 : 50}>
+            <PanelResizeHandle className='border-r-2  ' />
+            <Panel defaultSize={76} minSize={ 60}>
                 {rightPanel}
             </Panel>
         </PanelGroup>
